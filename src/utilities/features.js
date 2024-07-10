@@ -1,5 +1,7 @@
 import jwt from "jsonwebtoken"
 import { ApiResponse } from "./apiResponse.js"
+import { User } from "../models/user.models.js";
+import { ApiError } from "./apiError.js";
 
 const cookieOptions = {
     httpOnly: true,
@@ -8,14 +10,17 @@ const cookieOptions = {
     maxAge: 15 * 24 * 60 * 1000
 }
 
-const sendToken = async(res,user, code, message)=>{
+const sendToken = async (res, user, code, message) => {
     try {
-        const token = await jwt.sign({_id: user._id}, process.env.JWT_SECRET)
-        return res.code(code).cookie("token",token,cookieOptions).send(
-            ApiResponse(201, user, message)
-        )
+        console.log("creating token");
+        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET)
+        if(token) {return res.status(code).cookie("token", token, cookieOptions).send(
+            new ApiResponse(201, user, message)
+        )}
+        throw new ApiError(500,"Token creation error")
     } catch (error) {
-        
+        console.log("Token Creation error ", error);
+        await User.findByIdAndDelete(user?._id)
     }
 }
 
