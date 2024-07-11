@@ -71,7 +71,7 @@ const login = asyncHandler(async (req, res) => {
     // console.log(req.body);
 
     if (!username || !password) {
-        return new ApiError(400, "Username and Password is required.")
+        throw new ApiError(400, "Username and Password is required.")
     }
 
     // console.log(username, password);
@@ -83,13 +83,13 @@ const login = asyncHandler(async (req, res) => {
     console.log(user);
 
     if (!user) {
-        return new ApiError(404, "User does not exist.")
+        throw new ApiError(404, "User does not exist.")
     }
 
     const isPasswordValid = await user.isPasswordCorrect(password)
 
     if (!isPasswordValid) {
-        return new ApiError(401, "Invalid credentials.")
+        throw new ApiError(401, "Invalid credentials.")
     }
 
     sendToken(res, user, 200, `Welcome back, ${user.name}!`)
@@ -103,8 +103,18 @@ const logout = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, "Logout successfully."));
 })
 
+const getMyProfile = asyncHandler(async (req, res) => {
+    const user = await User.findById(req?.user?._id)
+    if (!user) throw ApiError(404, "User not found")
+
+    return res.status(200).json(
+        new ApiResponse(201, user, "User data fetched successfully")
+    )
+})
+
 export {
     register,
     login,
-    logout
+    logout,
+    getMyProfile
 }
