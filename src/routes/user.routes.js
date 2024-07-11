@@ -1,6 +1,6 @@
 import express from "express"
 import { upload } from "../middlewares/multer.middleware.js"
-import { login, register } from "../controllers/user.controllers.js"
+import { login, register, logout } from "../controllers/user.controllers.js"
 import { verifyToken } from "../middlewares/auth.middleware.js"
 
 const router = express.Router()
@@ -12,8 +12,8 @@ router.route("/register").post(upload.fields([
     }
 ]), register)
 
-
-// Secured Routes: -
 router.route("/login").post(login)
+// Secured Routes: -
+router.route("/logout").post(verifyToken,logout)
 
 export default router

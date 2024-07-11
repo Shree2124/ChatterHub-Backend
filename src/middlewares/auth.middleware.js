@@ -6,17 +6,16 @@ import { User } from "../models/user.models.js"
 export const verifyToken = asyncHandler(async (req, res,next) => {
     try {
         const token = req.cookies?.token || req.header("Authorization")?.replace("Bearer ", "")
-        console.log(token);
+        // console.log(token);
         if (!token) {
             throw new ApiError(401, "Unauthorize request");
         }
         const decodedToken = jwt.verify(token, process.env.JWT_SECRET)
-        console.log(decodedToken);
+        // console.log(decodedToken);
         const user = await User.findById(decodedToken?._id).select("-password")
 
         if (!user) {
             throw new ApiError(401, "Invalid token")
-
         }
         req.user = user;
         next();

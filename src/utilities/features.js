@@ -3,7 +3,7 @@ import { ApiResponse } from "./apiResponse.js"
 import { User } from "../models/user.models.js";
 import { ApiError } from "./apiError.js";
 
-const cookieOptions = {
+export const cookieOptions = {
     httpOnly: true,
     secure: true,
     sameSite: "none",

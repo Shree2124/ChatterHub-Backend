@@ -1,8 +1,9 @@
 import { ApiError } from "../utilities/apiError.js"
 import { asyncHandler } from "../utilities/asyncHandler.js"
-import { sendToken } from "../utilities/features.js"
+import { cookieOptions, sendToken } from "../utilities/features.js"
 import { uploadOnCloudinary } from "../utilities/Cloudinary.js"
 import { User } from "../models/user.models.js"
+import { ApiResponse } from "../utilities/apiResponse.js"
 
 const register = asyncHandler(async (req, res) => {
     console.log(req);
@@ -95,7 +96,15 @@ const login = asyncHandler(async (req, res) => {
 
 })
 
+const logout = asyncHandler(async (req, res) => {
+    return res
+        .status(200)
+        .cookie("token", "", { ...cookieOptions, maxAge: 0 })
+        .json(new ApiResponse(200, "Logout successfully."));
+})
+
 export {
     register,
-    login
+    login,
+    logout
 }
