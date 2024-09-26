@@ -5,8 +5,9 @@ import { User } from "../models/user.models.js"
 
 export const verifyToken = asyncHandler(async (req, res, next) => {
     try {
-        const token = req.cookies?.token || req.header("Authorization")?.replace("Bearer ", "")
-        // console.log(token);
+        const token =
+            req.cookies?.token ||
+            req.header("Authorization")?.replace("Bearer ", "");
         if (!token) {
             throw new ApiError(401, "Unauthorize request");
         }
@@ -20,6 +21,6 @@ export const verifyToken = asyncHandler(async (req, res, next) => {
         req.user = user;
         next();
     } catch (error) {
-
+        throw new ApiError(401,error)
     }
 })

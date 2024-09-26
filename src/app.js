@@ -32,9 +32,11 @@ app.use(cookieParser());
 
 // ⁡⁢⁣⁢+⁡ routes import
 import userRouter from "./routes/user.routes.js";
+import chatsRouter from "./routes/chats.routes.js";
 
 // routes declaration
 app.use("/v1/api/users", userRouter);
+app.use("/v1/api/chats", chatsRouter);
 // url: -http://localhost:8000/api/v1/users/${route}
 
 export { app };

@@ -80,7 +80,7 @@ const login = asyncHandler(async (req, res) => {
         $or: [{ username }, { email }],
     }).select("+password");
 
-    console.log(user);
+    // console.log(user);
 
     if (!user) {
         throw new ApiError(404, "User does not exist.")
@@ -112,9 +112,17 @@ const getMyProfile = asyncHandler(async (req, res) => {
     )
 })
 
+const searchUser = asyncHandler(async (req, res)=>{
+    const { name } = req.query;
+
+    return res.status(200).json(new ApiResponse(201, name, "success"))
+})
+    
+
 export {
     register,
     login,
     logout,
-    getMyProfile
+    getMyProfile,
+    searchUser
 }

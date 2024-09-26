@@ -12,7 +12,7 @@ export const cookieOptions = {
 
 const sendToken = async (res, user, code, message) => {
     try {
-        console.log("creating token");
+        // console.log("creating token");
         const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET)
         if(token) {return res.status(code).cookie("token", token, cookieOptions).send(
             new ApiResponse(201, user, message)
